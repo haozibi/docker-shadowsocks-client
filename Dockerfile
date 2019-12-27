@@ -4,7 +4,7 @@
 
 FROM alpine
 
-ARG SS_VER=3.1.0
+ARG SS_VER=3.3.3
 ARG SS_URL=https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$SS_VER/shadowsocks-libev-$SS_VER.tar.gz
 
 ARG SIMPLE_OBFS_VER=0.0.4
@@ -21,24 +21,26 @@ ENV TIMEOUT     300
 ENV OBFS_ARG=
 ENV ARGS=
 
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+
 RUN set -ex && \
     apk update && \
     apk add --no-cache --virtual .build-deps \
-                                autoconf \
-                                build-base \
-                                curl \
-                                libev-dev \
-                                libtool \
-                                linux-headers \
-                                libsodium-dev \
-                                mbedtls-dev \
-                                pcre-dev \
-                                tar \
-                                automake \
-                                gettext-dev \
-                                openssl-dev \
-                                git \
-                                c-ares-dev && \
+        autoconf \
+        build-base \
+        curl \
+        libev-dev \
+        libtool \
+        linux-headers \
+        libsodium-dev \
+        mbedtls-dev \
+        pcre-dev \
+        tar \
+        automake \
+        gettext-dev \
+        openssl-dev \
+        git \
+        c-ares-dev && \
     cd /tmp && \
     curl -sSL $SS_URL | tar xz --strip 1 && \
     ./configure --prefix=/usr --disable-documentation && \
